@@ -1,0 +1,5 @@
+.build/
+MacAlarm.app/
+.DS_Store
+*.xcuserdatastate
+.swiftpm/
