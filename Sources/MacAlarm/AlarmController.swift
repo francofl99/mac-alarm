@@ -16,12 +16,23 @@ final class AlarmController {
     private var player: AVAudioPlayer?
     private var armTimer: Timer?
     private var repeatTimer: Timer?
+    private var spaceObserver: NSObjectProtocol?
 
     init(config: Config) {
         self.config = config
         watcher.onEvent = { [weak self] type, keyCode, flags in
             self?.handle(type: type, keyCode: keyCode, flags: flags) ?? false
         }
+        spaceObserver = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            guard let self, self.config.triggerOnSpaceChange else { return }
+            self.fire()
+        }
+    }
+
+    deinit {
+        if let spaceObserver { NSWorkspace.shared.notificationCenter.removeObserver(spaceObserver) }
     }
 
     var secondsRemaining: Int {

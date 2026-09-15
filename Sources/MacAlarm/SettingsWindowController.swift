@@ -12,6 +12,7 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
     private let repeatField = NSTextField()
     private let volumeSlider = NSSlider()
     private let blockCheckbox = NSButton(checkboxWithTitle: "Bloquear el teclado mientras suena", target: nil, action: nil)
+    private let spaceCheckbox = NSButton(checkboxWithTitle: "Disparar al cambiar de escritorio o abrir Mission Control", target: nil, action: nil)
     private let hotKeyButton = NSButton(title: "", target: nil, action: nil)
     private var recordingMonitor: Any?
 
@@ -68,7 +69,8 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
             [label("Repetir cada (seg, 0 = continuo):"), repeatField],
             [label("Volumen:"), volumeSlider],
             [label("Atajo:"), hotKeyButton],
-            [NSGridCell.emptyContentView, blockCheckbox]
+            [NSGridCell.emptyContentView, blockCheckbox],
+            [NSGridCell.emptyContentView, spaceCheckbox]
         ])
         grid.rowSpacing = 12
         grid.columnSpacing = 12
@@ -111,6 +113,7 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         repeatField.stringValue = String(format: "%g", config.repeatIntervalSeconds)
         volumeSlider.doubleValue = config.volume
         blockCheckbox.state = config.blockKeyboard ? .on : .off
+        spaceCheckbox.state = config.triggerOnSpaceChange ? .on : .off
         hotKeyButton.title = config.hotKeyDescription
     }
 
@@ -122,6 +125,7 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         updated.repeatIntervalSeconds = max(0, Double(repeatField.stringValue) ?? config.repeatIntervalSeconds)
         updated.volume = volumeSlider.doubleValue
         updated.blockKeyboard = blockCheckbox.state == .on
+        updated.triggerOnSpaceChange = spaceCheckbox.state == .on
         return updated
     }
 
