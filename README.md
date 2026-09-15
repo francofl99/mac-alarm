@@ -13,7 +13,8 @@ oficina o un hermano menor tocan una tecla, se enteran.
 
 1. Activás con `⌃⌥⌘A` (configurable) o desde el menú del ícono.
 2. Arranca una cuenta regresiva (20 s por defecto) para que puedas soltar el teclado.
-3. Queda armada: el mouse no la dispara, cualquier tecla sí.
+3. Queda armada: el mouse no la dispara, cualquier tecla sí. Opcionalmente también dispara al
+   cambiar de escritorio o abrir Mission Control (swipe de tres dedos, horizontal o hacia arriba).
 4. Al dispararse: audio en loop o repetido cada N segundos, pantalla negra con el texto en grande en
    todos los monitores, teclado bloqueado.
 
@@ -67,6 +68,7 @@ El archivo vive en `~/Library/Application Support/MacAlarm/config.json`:
   "soundPath": "/System/Library/Sounds/Sosumi.aiff",
   "repeatIntervalSeconds": 3,
   "blockKeyboard": true,
+  "triggerOnSpaceChange": true,
   "volume": 1,
   "hotKey": { "key": "A", "modifiers": ["control", "option", "command"] }
 }
@@ -75,6 +77,11 @@ El archivo vive en `~/Library/Application Support/MacAlarm/config.json`:
 - `repeatIntervalSeconds: 0` → el audio suena en loop continuo.
 - `soundPath` acepta cualquier formato que lea AVFoundation (aiff, wav, mp3, m4a).
 - `blockKeyboard: false` → suena y muestra el mensaje, pero te deja seguir escribiendo.
+- `triggerOnSpaceChange` usa `NSWorkspace.activeSpaceDidChangeNotification`, que cubre tanto el
+  cambio de escritorio (swipe horizontal de tres dedos, Ctrl+←/→) como abrir Mission Control (swipe
+  de tres dedos hacia arriba, Ctrl+↑) y entrar a pantalla completa. Los gestos del trackpad los
+  consume el sistema y no llegan como eventos, así que se detecta el efecto, no el gesto: la alarma
+  salta una vez consumado el cambio y no se puede cancelar antes.
 
 ## Arquitectura
 

@@ -40,6 +40,7 @@ struct Config: Codable {
     var soundPath: String = "/System/Library/Sounds/Sosumi.aiff"
     var repeatIntervalSeconds: Double = 3
     var blockKeyboard: Bool = true
+    var triggerOnSpaceChange: Bool = true
     var volume: Double = 1.0
     var hotKey: HotKeyConfig = HotKeyConfig(key: "A", modifiers: ["control", "option", "command"])
 
@@ -53,6 +54,7 @@ struct Config: Codable {
         soundPath = try c.decodeIfPresent(String.self, forKey: .soundPath) ?? fallback.soundPath
         repeatIntervalSeconds = try c.decodeIfPresent(Double.self, forKey: .repeatIntervalSeconds) ?? fallback.repeatIntervalSeconds
         blockKeyboard = try c.decodeIfPresent(Bool.self, forKey: .blockKeyboard) ?? fallback.blockKeyboard
+        triggerOnSpaceChange = try c.decodeIfPresent(Bool.self, forKey: .triggerOnSpaceChange) ?? fallback.triggerOnSpaceChange
         volume = try c.decodeIfPresent(Double.self, forKey: .volume) ?? fallback.volume
         hotKey = try c.decodeIfPresent(HotKeyConfig.self, forKey: .hotKey) ?? fallback.hotKey
     }
